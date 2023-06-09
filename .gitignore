@@ -1,0 +1,9 @@
+/vendor/
+/sessions.db
+/.htaccess
+/.env
+/php_sessions/
+/sessions/
+/cache/
+/log/
+/.idea/

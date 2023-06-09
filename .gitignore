@@ -7,3 +7,6 @@
 /cache/
 /log/
 /.idea/
+/favicon.ico
+/sessions.db-shm
+/sessions.db-wal

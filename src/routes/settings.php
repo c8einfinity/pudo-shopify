@@ -1,10 +1,7 @@
 <?php
 
 \Tina4\Get::add("/settings", function(\Tina4\Response $response, \Tina4\Request $request) {
-
     $services = (new ShopifyHelper())->getCarrierServices($request);
-
-    //print_r ($services);
 
     $pudoShopSettings = new PudoShopSettings();
     $pudoShopSettings->load("shop = ?", [$request->params["shop"]]);
@@ -17,11 +14,9 @@
     $pudoShopSettings = new PudoShopSettings($request->data);
     $pudoShopSettings->load("shop = ?", [$request->data->shop]);
 
-    if ($pudoShopSettings->save()) {
+    if (!$pudoShopSettings->save()) {
         \Tina4\redirect("/settings?message=Saved Settings&shop={$request->data->shop}");
     } else {
         \Tina4\redirect("/settings?error=Could not save settings&shop={$request->data->shop}");
     }
-
-
 });

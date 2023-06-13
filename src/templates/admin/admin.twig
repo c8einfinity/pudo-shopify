@@ -1,58 +1,70 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    <main role="main">
+    <div class="container">
+        {% if request.message %}
+            <div class="alert alert-info">{{ request.message }}</div>
+        {% endif %}
+
         <div class="row">
-            <div class="col-lg-8 offset-1">
+            <div class="col-12">
                 <div class="card border-primary mb-3" style="max-width: 100rem;">
                     <div class="card-header">Setting up Pudo</div>
                     <div class="card-body">
                         <h4 class="card-title">Welcome to Pudo</h4>
-                        <p class="card-text">Get things started by heading to the app settings <img src="src/public/images/Pudo-logo-Digital.png" alt="Pudo Logo" style="float:right;width:343px;height:139px;"></p>
-                        <form action="/settings">
-                            <button class="btn btn-primary">Settings</button>
-                        </form>
+                        <p class="card-text">Get things started by heading to the app settings <img
+                                    src="/images/Pudo-logo-Digital.png" alt="Pudo Logo"
+                                    class="img-thumbnail" style="float: right">
+                        </p>
+
+                        <a href="{{ getShopifyUrl('/settings', accessToken.shop) }}" class="btn btn-primary">Settings</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8 offset-1">
+            <div class="col-12">
                 <div class="card border-secondary mb-3" style="max-width: 100rem;">
                     <div class="card-header">Activating Pudo</div>
                     <div class="card-body">
                         <h4 class="card-title">Activate Pudo</h4>
                         <p class="card-text">Clicking this button </p>
-                        <form action="/list/carriers">
+                        <form action="/carriers/activate" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="shop" value="{{ accessToken.shop }}">
                             <button class="btn btn-success">Activate</button>
                         </form>
+                        <script> // Get status of carriers from app bridge
+
+                        </script>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8 offset-1">
+            <div class="col-12">
                 <div class="card border-secondary mb-3" style="max-width: 100rem;">
                     <div class="card-header">Get Started</div>
                     <div class="card-body">
                         <p class="card-text">1. Go to the <a href="/settings">Settings</a> Page</p>
-                        <p class="card-text">2. Fill in the settings page -<br />
-                            Fill in your company name (required)<br />
-                            Fill in your PUDO account code (required)<br />
-                            Fill in your PUDO account email (required)<br />
-                            Select whether it is taxable or not (optional)<br />
-                            Input your TaxRate  (optional)<br />
-                            Do you wish to insure goods (optional)<br />
-                            Are you using a generic WayBill (optional)<br />
-                            Do you wish to offer free Shipping  (optional)<br />
-                            If you offer free shipping set the cart amount to allow. (optional)<br />
+                        <p class="card-text">2. Fill in the settings page -<br/>
+                            Fill in your company name (required)<br/>
+                            Fill in your PUDO account code (required)<br/>
+                            Fill in your PUDO account email (required)<br/>
+                            Select whether it is taxable or not (optional)<br/>
+                            Input your TaxRate (optional)<br/>
+                            Do you wish to insure goods (optional)<br/>
+                            Are you using a generic WayBill (optional)<br/>
+                            Do you wish to offer free Shipping (optional)<br/>
+                            If you offer free shipping set the cart amount to allow. (optional)<br/>
                             You can offer Locker to Locker Special shipping. (optional)</p>
                         <p class="card-text">3. Go back to the app's home page and click on the
                             <strong>Activate</strong> button to activate the shipping rates.</p>
                         <p class="card-text">4. Go to your store shipping settings, and add Pudo
                             as a carrier service to the required shipping zones. </p>
-                        <p class="card-text">5. If you do not see Pudo on the Checkout page, make sure that your store is
-                            <a href="https://help.shopify.com/en/manual/shipping/setting-up-and-managing-your-shipping/enabling-shipping-carriers" target="_blank">eligible for 3rd party carrier services</a>.</p>
+                        <p class="card-text">5. If you do not see Pudo on the Checkout page, make sure that your
+                            store is
+                            <a href="https://help.shopify.com/en/manual/shipping/setting-up-and-managing-your-shipping/enabling-shipping-carriers"
+                               target="_blank">eligible for 3rd party carrier services</a>.</p>
                         <p class="card-text">6. If you still can not see shipping prices, please email
                             <a href="mailto:integrations@pudo.co.za">integrations@pudo.co.za</a>.</p>
                     </div>
@@ -60,17 +72,20 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8 offset-1">
+            <div class="col-lg-12">
                 <div class="card border-secondary mb-3" style="max-width: 100rem;">
                     <div class="card-header">Pudo Documentation Links</div>
                     <div class="card-body">
                         <h4 class="card-title">Important Documentation</h4>
-                        <p class="card-text"><a href="https://www.pudo.co.za/imgs/PUDO_T&C.pdf">Terms & Conditions</a>.</p>
-                        <p class="card-text"><a href="https://www.thecourierguy.co.za/privacy-policy">Privacy Policy</a>.</p>
+                        <p class="card-text"><a href="https://www.pudo.co.za/imgs/PUDO_T&C.pdf">Terms &
+                                Conditions</a>.</p>
+                        <p class="card-text"><a href="https://www.thecourierguy.co.za/privacy-policy">Privacy
+                                Policy</a>.</p>
                         <p class="card-text"><a href="https://www.thecourierguy.co.za/popia">POPI</a>.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+
+    </div>
 {% endblock %}

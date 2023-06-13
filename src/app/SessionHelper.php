@@ -4,33 +4,61 @@ class SessionHelper extends \Tina4\Data implements \Shopify\Auth\SessionStorage
 {
 
     /**
-     * @throws \Psr\Cache\InvalidArgumentException
+     * Stores the session the database
      */
     public function storeSession(\Shopify\Auth\Session $session): bool
     {
         // TODO: Implement storeSession() method.
-        file_put_contents("./sessions/{$session->getId()}", serialize($session));
+        $sessionData = (new Session());
+        //file_put_contents("./sessions/{$session->getId()}", serialize($session));
+        $sessionData->sessionId = $session->getId();
+        $sessionData->shop = $session->getShop();
+        $sessionJson = json_encode(["id" => $session->getId(), "shop" => $session->getShop(), "isOnline" => $session->isOnline(), "state" => $session->getState(), "accessToken" => $session->getAccessToken(), "expires" => $session->getExpires()]);
+        $sessionData->sessionData = $sessionJson;
+        $sessionData->save();
+
         return true;
 
     }
 
+    /**
+     * Loads the session for Shopify from the database
+     * @param string $sessionId
+     * @return mixed|\Shopify\Auth\Session|null
+     */
     public function loadSession(string $sessionId)
     {
         // TODO: Implement loadSession() method.
-        if (file_exists("./sessions/{$sessionId}")) {
-            return unserialize(file_get_contents("./sessions/{$sessionId}"));
+        $sessionData = new Session();
+        if ($sessionData->load("session_id = ?", [$sessionId])) {
+            $sessionJson = json_decode($sessionData->sessionData);
+
+            $session = new \Shopify\Auth\Session($sessionJson->id, $sessionJson->shop, $sessionJson->isOnline, $sessionJson->state);
+            return $session;
         }
 
         return null;
     }
 
+    /**
+     * Deletes the session from the database
+     * @param string $sessionId
+     * @return bool
+     */
     public function deleteSession(string $sessionId): bool
     {
         unlink("./sessions/{$sessionId}");
         return true;
     }
 
-    public function getCookieData($shop): array
+    /**
+     * Gets cookies for a particular shop
+     * @param $shop
+     * @return array
+     * @throws ReflectionException
+     */
+
+    public function getCookieData(string $shop): array
     {
         $cookies = (new Cookie())->select("*")->where("shop = ?", [$shop])->asArray();
 

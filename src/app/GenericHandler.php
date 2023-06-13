@@ -15,6 +15,10 @@ class GenericHandler implements Handler
                 (new ShopifyHelper())->removeShop($shop);
 
             break;
+            case Shopify\Webhooks\Topics::CARTS_CREATE:
+                // Do something when a cart is created
+                \Tina4\Debug::message("Cart created for shop {$shop}", TINA4_LOG_ALERT);
+            break;
 
         }
 

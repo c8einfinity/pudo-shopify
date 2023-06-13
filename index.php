@@ -21,8 +21,17 @@ $config = new \Tina4\Config(function(\Tina4\Config $config) {
     //Add the handlers to listen to the webhooks
     (new ShopifyHelper())->addHandlers();
 
+    $config->addTwigFunction("getShopifyUrl",
+        function($url, $shop)
+        {
+            return (new ShopifyHelper())->getShopifyUrl($url, $shop);
+        }
+    );
+
 });
 
 $config->setAuth(new AuthHelper());
+
+
 
 echo new \Tina4\Tina4Php($config);

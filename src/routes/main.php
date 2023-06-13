@@ -16,7 +16,7 @@
         \Tina4\redirect($url);
     }
 
-    if (!isset($request->params["shop"])) {
+    if (!isset($request->params["shop"]) || !isset($request->data->shop)) {
         return $response("No access", HTTP_FORBIDDEN);
     }
 

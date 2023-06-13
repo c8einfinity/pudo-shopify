@@ -1,0 +1,1 @@
+ alter table pudo_shop_settings add pudo_api_key    varchar(255) default '';

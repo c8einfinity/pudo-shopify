@@ -42,8 +42,6 @@ if (host === "localhost") {
   };
 }
 
-console.log('VARS', process.env.SHOPIFY_API_KEY );
-
 export default defineConfig({
   root: dirname(fileURLToPath(import.meta.url)),
   plugins: [react()],

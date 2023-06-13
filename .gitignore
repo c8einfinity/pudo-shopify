@@ -10,3 +10,4 @@
 /favicon.ico
 /sessions.db-shm
 /sessions.db-wal
+/node_modules/

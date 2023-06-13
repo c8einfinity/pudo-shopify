@@ -3,7 +3,7 @@
 /**
  * @secure
  */
-\Tina4\Post::add("/shopify/webhooks", function(\Tina4\Response $response, \Tina4\Request $request) {
+\Tina4\Post::add("/shopify/webhooks|api/webhooks", function(\Tina4\Response $response, \Tina4\Request $request) {
     \Tina4\Debug::message("Webhook fired ", TINA4_LOG_ALERT);
     try {
         $checkAuth = Shopify\Webhooks\Registry::process($request->headers, $request->rawRequest);

@@ -10,6 +10,7 @@
         $cookieData->save();
         return true;
     } );
+
     \Tina4\redirect($url);
 });
 
@@ -23,17 +24,10 @@
 
     $session = Shopify\Auth\OAuth::callback($cookieData, $request->params);
 
-    $loadedSession = \Shopify\Context::$SESSION_STORAGE->loadSession($session->getId());
-
-    $sessionData = new Session();
-    $sessionData->shop = $loadedSession->getShop();
-    $sessionData->sessionData = json_encode(["accessToken" => $loadedSession->getAccessToken(), "scope" => $loadedSession->getScope(), "id" => $loadedSession->getId(), "expires" => $loadedSession->getExpires()]);
-    $sessionData->save();
-
-
-    (new ShopifyHelper())->registerHandlers($loadedSession->getShop(), $loadedSession->getAccessToken());
+    (new SessionHelper())->storeSession($session);
+    (new ShopifyHelper())->registerHandlers($session->getShop(), $session->getAccessToken());
 
     //redirect here to store
-   \Tina4\redirect("https://{$request->params["shop"]}");
+    \Tina4\redirect("https://{$request->params["shop"]}");
 });
 

@@ -20,5 +20,7 @@
         return $response("No access", HTTP_FORBIDDEN);
     }
 
-    return $response(\Tina4\renderTemplate("admin/admin.twig", (new ShopifyHelper())->getSessionData($request)));
+    $carriers = (new ShopifyHelper())->getCarrierServices($request);
+
+    return $response(\Tina4\renderTemplate("admin/admin.twig", array_merge(["carriers" => $carriers],  (new ShopifyHelper())->getSessionData($request))));
 });

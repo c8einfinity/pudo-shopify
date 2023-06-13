@@ -6,7 +6,7 @@ use Shopify\Exception\MissingArgumentException;
 use Shopify\Exception\UninitializedContextException;
 use Shopify\Exception\WebhookRegistrationException;
 use Shopify\Webhooks\Registry;
-use Shopify\Webhooks\Topics;
+use Tina4\Debug;
 
 
 class ShopifyHelper
@@ -23,10 +23,7 @@ class ShopifyHelper
      */
     private function getRestClient($request): Rest
     {
-
         $sessionData = $this->getSessionData($request);
-
-
 
         if (isset($sessionData["accessToken"])) {
             $session = $sessionData["accessToken"];
@@ -70,9 +67,9 @@ class ShopifyHelper
 
             if ($response->isSuccess()) {
                 // Webhook registered!
-                \Tina4\Debug::message("Webhook registration succeeded for:".$handler , TINA4_LOG_ALERT);
+                Debug::message("Webhook registration succeeded for:".$handler , TINA4_LOG_ALERT);
             } else {
-                \Tina4\Debug::message("Webhook registration failed with response: \n" . var_export($response, true), TINA4_LOG_ERROR);
+                Debug::message("Webhook registration failed with response: \n" . var_export($response, true), TINA4_LOG_ERROR);
             }
         }
     }
@@ -92,7 +89,7 @@ class ShopifyHelper
 
         //Fetch the session data from the database
 
-        $sessionData = (new Session())->select("*")->where("shop = ?", [$request->params["shop"] ?? $request->data->shop ])->asArray();
+        $sessionData = (new Session())->select()->where("shop = ?", [$request->params["shop"] ?? $request->data->shop ])->asArray();
 
         if (empty($sessionData)) {
             return [];
@@ -128,7 +125,6 @@ class ShopifyHelper
     public function getCarrierServices ($request): array
     {
         $client = $this->getRestClient($request);
-
         $response = $client->get('carrier_services');
 
         return $response->getDecodedBody()["carrier_services"];
@@ -143,24 +139,19 @@ class ShopifyHelper
      * @throws ClientExceptionInterface
      * @throws UninitializedContextException
      */
-    public function createCarrierService($request, array $data)
+    public function createCarrierService($request, array $data): array
     {
-
         $response = [];
         try {
             $client = $this->getRestClient($request);
-
             $response = $client->post('carrier_services', $data);
-
-            print_r ($response->getHeaders());
 
             return $response->getDecodedBody();
         } catch (ReflectionException|MissingArgumentException $e) {
-            \Tina4\Debug::message($e->getMessage(), TINA4_LOG_ERROR);
+            Debug::message($e->getMessage(), TINA4_LOG_ERROR);
         }
 
         return $response;
-
     }
 
     /**
@@ -172,6 +163,31 @@ class ShopifyHelper
     public function getShopifyUrl($url, $shop) : string
     {
         return $url."?shop=".$shop;
+    }
+
+    /**
+     * Remove carrier service
+     * @param \Tina4\Request $request
+     * @param array $data
+     * @return array|null
+     * @throws ClientExceptionInterface
+     * @throws JsonException
+     * @throws UninitializedContextException
+     */
+    public function deleteCarrierService(\Tina4\Request $request, array $data): ?array
+    {
+        $response = [];
+        try {
+            $client = $this->getRestClient($request);
+
+            $response = $client->delete('carrier_services/'.$data["id"]);
+
+            return $response->getDecodedBody();
+        } catch (ReflectionException|MissingArgumentException $e) {
+            Debug::message($e->getMessage(), TINA4_LOG_ERROR);
+        }
+
+        return $response;
     }
 
 }

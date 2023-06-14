@@ -4,7 +4,7 @@ class PudoApi extends \Tina4\Api
 {
     public $baseURL = "https://pudo...";
 
-    function getCarriers()
+    function getLockers()
     {
         return $this->sendRequest("/carriers");
     }

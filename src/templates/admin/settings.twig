@@ -21,22 +21,26 @@
                     <label>
                         <input class="form-control" type="text" placeholder="Pudo API Url" name="pudoApiUrl" value="{{ pudoShopSettings.pudoApiUrl }}">
                     </label>
+
+                    <div class="form-group">
+                        <label for="taxable">Published</label>
+                        <input type="checkbox" name="taxable" value="1" {%  if (pudoShopSettings.taxable == 1 ) %} checked {% endif%} >
+                    </div>
+
+                    {{ pudoShopSettings.typeOfPickup }}
+                    <select name="typeOfPickup">
+                        {% for option in options %}
+                            <option value="{{ option }}"  {%  if (pudoShopSettings.typeOfPickup == option ) %} selected {% endif%} >{{ option }}</option>
+                        {% endfor %}
+                    </select>
+
                     <input type="hidden" name="shop" value="{{ accessToken.shop }}">
                     <button class="btn btn-primary">Save</button>
                 </form>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="taxable">Published</label>
-            <input type="checkbox" name="taxable" value="1" {%  if (pudoShopSettings.taxable == 1 ) %} checked {% endif%} >
-        </div>
 
-        <select name="test">
-            {% for option in options %}
-                <option value="{{ option }}"   {%  if (pudoShopSettings.isPublished == 1 ) %} selected {% endif%} >{{ option }}</option>
-            {% endfor %}
-        </select>
 
         {{ dump(pudoShopSettings) }}
     </div>

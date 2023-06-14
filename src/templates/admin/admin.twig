@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="card border-primary mb-3" style="max-width: 100rem;">
+                <div class="card border-primary mb-3">
                     <div class="card-header">Setting up Pudo</div>
                     <div class="card-body">
                         <h4 class="card-title">Welcome to Pudo</h4>
@@ -17,32 +17,38 @@
                                     class="img-thumbnail" style="float: right">
                         </p>
 
-                        <a href="{{ getShopifyUrl('/settings', accessToken.shop) }}" class="btn btn-primary">Settings</a>
+                        <a href="{{ getShopifyUrl('/settings', accessToken.shop) }}"
+                           class="btn btn-primary">Settings</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card border-secondary mb-3" style="max-width: 100rem;">
+                <div class="card border-secondary mb-3">
                     <div class="card-header">Activating Pudo</div>
                     <div class="card-body">
                         <h4 class="card-title">Activate Pudo</h4>
-                        <p class="card-text">Clicking this button </p>
-                        <form action="/carriers/activate" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="shop" value="{{ accessToken.shop }}">
-                            <button class="btn btn-success">Activate</button>
-                        </form>
-                        <script> // Get status of carriers from app bridge
-
-                        </script>
+                        {% if ( not carriers) %}
+                            <p class="card-text">Clicking this button will activate the carrier for your store </p>
+                            <form action="/carriers/activate" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="shop" value="{{ accessToken.shop }}">
+                                <button class="btn btn-success">Activate</button>
+                            </form>
+                        {% else %}
+                            <p class="card-text">Clicking this button will de-activate the carrier for your store </p>
+                            <form action="/carriers/de-activate" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="shop" value="{{ accessToken.shop }}">
+                                <button class="btn btn-danger">Deactivate</button> {{ carriers[0].name }}
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card border-secondary mb-3" style="max-width: 100rem;">
+                <div class="card border-secondary mb-3">
                     <div class="card-header">Get Started</div>
                     <div class="card-body">
                         <p class="card-text">1. Go to the <a href="/settings">Settings</a> Page</p>

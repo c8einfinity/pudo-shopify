@@ -27,6 +27,17 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="taxable">Published</label>
+            <input type="checkbox" name="taxable" value="1" {%  if (pudoShopSettings.taxable == 1 ) %} checked {% endif%} >
+        </div>
+
+        <select name="test">
+            {% for option in options %}
+                <option value="{{ option }}"   {%  if (pudoShopSettings.isPublished == 1 ) %} selected {% endif%} >{{ option }}</option>
+            {% endfor %}
+        </select>
+
         {{ dump(pudoShopSettings) }}
     </div>
 {% endblock %}

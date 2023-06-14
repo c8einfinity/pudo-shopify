@@ -6,7 +6,7 @@
     $pudoShopSettings = new PudoShopSettings();
     $pudoShopSettings->load("shop = ?", [$request->params["shop"]]);
 
-    return $response(\Tina4\renderTemplate("admin/settings.twig", array_merge(["pudoShopSettings" => $pudoShopSettings, "options" => ["one", "two", "three"]], (new ShopifyHelper())->getSessionData($request))));
+    return $response(\Tina4\renderTemplate("admin/settings.twig", array_merge(["pudoShopSettings" => $pudoShopSettings, "options" => ["Locker", "Street"]], (new ShopifyHelper())->getSessionData($request))));
 });
 
 

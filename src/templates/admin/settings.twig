@@ -10,38 +10,123 @@
             <div class="alert alert-danger">{{ request.error }}</div>
         {% endif %}
 
-        <h1>Settings</h1>
         <div class="row">
             <div class="col-md-12">
-                <form method="post" enctype="multipart/form-data">
-                    <!-- All the data -->
-                    <label>
-                        <input class="form-control" type="text" placeholder="Pudo API Key" name="pudoApiKey" value="{{ pudoShopSettings.pudoApiKey }}">
-                    </label>
-                    <label>
-                        <input class="form-control" type="text" placeholder="Pudo API Url" name="pudoApiUrl" value="{{ pudoShopSettings.pudoApiUrl }}">
-                    </label>
-
-                    <div class="form-group">
-                        <label for="taxable">Published</label>
-                        <input type="checkbox" name="taxable" value="1" {%  if (pudoShopSettings.taxable == 1 ) %} checked {% endif%} >
+                <div class="card border-primary mb-3">
+                    <div class="card-header">Pudo Settings</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Account Settings</h4>
+                        <form method="post" enctype="multipart/form-data">
+                            <!-- All the data -->
+                            <div class="form-group mt-2">
+                                <label for="pudoAccountCode" class="form-label">PUDO Account ID</label>
+                                <input class="form-control" type="text" placeholder="PUDO Account ID"
+                                       name="pudoAccountCode"
+                                       value="{{ pudoShopSettings.pudoAccountCode }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="pudoApiKey" class="form-label">PUDO API Key</label>
+                                <input class="form-control" type="text" placeholder="PUDO API Key" name="pudoApiKey"
+                                       value="{{ pudoShopSettings.pudoApiKey }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="pudoApiUrl" class="form-label">PUDO API Url</label>
+                                <input class="form-control" type="text" placeholder="PUDO API Url" name="pudoApiUrl"
+                                       value="{{ pudoShopSettings.pudoApiUrl }}">
+                            </div>
+                            <h4 class="card-title mt-3">Pudo Source</h4>
+                            <div class="form-group">
+                                <label for="typeOfPickup">Select locker or address as source</label>
+                                <select name="typeOfPickup" class="form-control">
+                                    {% for option in options %}
+                                        <option value="{{ option }}" {% if (pudoShopSettings.typeOfPickup == option ) %} selected {% endif %} >{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="pudoSourceLocker" class="form-label">PUDO Source Locker</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="pudoSourceLocker"
+                                       value="{{ pudoShopSettings.pudoSourceLocker }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="sourceAddressLine1" class="form-label">Address Line 1</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="sourceAddressLine1"
+                                       value="{{ pudoShopSettings.sourceAddressLine1 }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="sourceAddressLine2" class="form-label">Address Line 2</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="sourceAddressLine3"
+                                       value="{{ pudoShopSettings.sourceAddressLine2 }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="sourceAddressLine3" class="form-label">Address Line 3</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="sourceAddressLine3"
+                                       value="{{ pudoShopSettings.sourceAddressLine3 }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="pudoSourceLocker" class="form-label">PUDO Source Locker</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="pudoSourceLocker"
+                                       value="{{ pudoShopSettings.pudoSourceLocker }}">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="pudoSourceLocker" class="form-label">PUDO Source Locker</label>
+                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="pudoSourceLocker"
+                                       value="{{ pudoShopSettings.pudoSourceLocker }}">
+                            </div>
+                            <h4 class="card-title mt-3">Other Settings</h4>
+                            <div class="form-group form-check mt-2">
+                                <label class="form-label" for="taxable">Taxable</label>
+                                <input class="form-check-input" type="checkbox" name="taxable"
+                                       value="1" {% if (pudoShopSettings.taxable == 1 ) %} checked {% endif %} >
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="taxRate" class="form-label">Tax Rate</label>
+                                <input class="form-control" type="number" placeholder="15%" name="taxRate"
+                                       value="{{ pudoShopSettings.taxRate }}">
+                            </div>
+                            <div class="form-group form-check mt-2">
+                                <label class="form-label" for="genericWaybillDescription">Generic waybill
+                                    description</label>
+                                <input class="form-check-input" type="checkbox" name="genericWaybillDescription"
+                                       value="1" {% if (pudoShopSettings.genericWaybillDescription == 1 ) %} checked {% endif %} ><br>
+                                <small id="genericWaybillDescription" class="form-text text-muted">When enabled, a
+                                    generic product description will be shown on the waybill.</small>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="markup" class="form-label">Add Markup</label>
+                                <input class="form-control" type="number" placeholder="0" name="markup"
+                                       value="{{ pudoShopSettings.markup }}">
+                            </div>
+                            <div class="form-group form-check mt-2">
+                                <label class="form-label" for="freeShipping">Enable Free Shipping</label>
+                                <input class="form-check-input" type="checkbox" name="freeShipping"
+                                       value="1" {% if (pudoShopSettings.freeShipping == 1 ) %} checked {% endif %} >
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="freeShippingAmount" class="form-label">Free Shipping for orders over</label>
+                                <input class="form-control" type="number" placeholder="0" name="freeShippingAmount"
+                                       value="{{ pudoShopSettings.freeShippingAmount }}">
+                            </div>
+                            <div class="form-group form-check mt-2">
+                                <label class="form-label" for="lockerToLockerSpecial">Use Locker to Locker
+                                    Promotion</label>
+                                <input class="form-check-input" type="checkbox" name="lockerToLockerSpecial"
+                                       value="1" {% if (pudoShopSettings.lockerToLockerSpecial == 1 ) %} checked {% endif %} ><br>
+                                <small id="lockerToLockerSpecial" class="form-text text-muted">Check this to enable the
+                                    Locker to Locker promotion. XS: R40.00. Small, Medium, Large, Extra Large:
+                                    R50.</small>
+                            </div>
+                            <input type="hidden" name="shop" value="{{ accessToken.shop }}">
+                            <button class="btn btn-primary mt-2">Save Settings</button>
+                        </form>
                     </div>
-
-                    {{ pudoShopSettings.typeOfPickup }}
-                    <select name="typeOfPickup">
-                        {% for option in options %}
-                            <option value="{{ option }}"  {%  if (pudoShopSettings.typeOfPickup == option ) %} selected {% endif%} >{{ option }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <input type="hidden" name="shop" value="{{ accessToken.shop }}">
-                    <button class="btn btn-primary">Save</button>
-                </form>
+                </div>
             </div>
         </div>
+    </div>
 
 
 
-        {{ dump(pudoShopSettings) }}
+    {{ dump(pudoShopSettings) }}
     </div>
 {% endblock %}

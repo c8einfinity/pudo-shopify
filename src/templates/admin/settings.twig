@@ -43,14 +43,50 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                            <div class="form-group form-check mt-2">
+                                <label class="form-label" for="testMode">Taxable</label>
+                                <input class="form-check-input" type="checkbox" name="testMode"
+                                       value="1" {% if (pudoShopSettings.testMode == 1 ) %} checked {% endif %} >
+                            </div>
                             <div class="form-group mt-2">
                                 <label for="pudoSourceLocker" class="form-label">PUDO Source Locker</label>
-                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="pudoSourceLocker"
-                                       value="{{ pudoShopSettings.pudoSourceLocker }}">
+                                <input class="form-control" id="searchLocker" onchange="updateLockers(this.value)" value="">
+                                <script>
+                                    function updateLockers(searchText)
+                                    {
+                                        getRoute("/settings/lockers?filter="+searchText+"&shop={{ pudoShopSettings.shop }}",
+                                        function (lockers){
+                                            //lockers = JSON.parse(lockers);
+                                            console.log ('Lockers', (lockers));
+                                            //Replace the options in the pudoSourceLocker
+
+                                            const sourceLocker = document.querySelector("#pudoSourceLocker");
+
+                                            Array.from(sourceLocker).forEach((option) => {
+                                                sourceLocker.removeChild(option)
+                                            })
+
+                                            for (let i = 0; i < lockers.length; i++) {
+                                                console.log ('Locker Data', lockers[i])
+                                                const opt = document.createElement('option')
+                                                opt.appendChild(document.createTextNode(lockers[i].name+' '+lockers[i].address));
+                                                opt.value = lockers[i].id;
+                                                sourceLocker.appendChild(opt);
+                                            }
+                                        });
+
+
+                                    }
+                                </script>
+                                <select id="pudoSourceLocker" name="pudoSourceLocker" class="form-control">
+                                    {% for locker in lockers %}
+                                        <option value="{{ locker.id }}" {% if (pudoShopSettings.pudoSourceLocker == locker.id ) %} selected {% endif %} >{{ locker.name }} {{ locker.address }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="form-group mt-2">
                                 <label for="sourceAddressLine1" class="form-label">Address Line 1</label>
-                                <input class="form-control" type="text" placeholder="PUDO Source Locker" name="sourceAddressLine1"
+                                <input class="form-control" type="text" placeholder="Address Line 1" name="sourceAddressLine1"
                                        value="{{ pudoShopSettings.sourceAddressLine1 }}">
                             </div>
                             <div class="form-group mt-2">
@@ -116,6 +152,7 @@
                                     Locker to Locker promotion. XS: R40.00. Small, Medium, Large, Extra Large:
                                     R50.</small>
                             </div>
+
                             <input type="hidden" name="shop" value="{{ accessToken.shop }}">
                             <button class="btn btn-primary mt-2">Save Settings</button>
                         </form>

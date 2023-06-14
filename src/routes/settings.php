@@ -6,7 +6,13 @@
     $pudoShopSettings = new PudoShopSettings();
     $pudoShopSettings->load("shop = ?", [$request->params["shop"]]);
 
-    return $response(\Tina4\renderTemplate("admin/settings.twig", array_merge(["pudoShopSettings" => $pudoShopSettings, "options" => ["Locker", "Street"]], (new ShopifyHelper())->getSessionData($request))));
+
+    $lockers = (new PudoApi($pudoShopSettings->pudoApiKey, $pudoShopSettings->testMode))->getLockers();
+
+
+    sort($lockers);
+
+    return $response(\Tina4\renderTemplate("admin/settings.twig", array_merge(["pudoShopSettings" => $pudoShopSettings, "lockers" => $lockers, "options" => ["Locker", "Street"]], (new ShopifyHelper())->getSessionData($request))));
 });
 
 
@@ -19,4 +25,22 @@
     } else {
         \Tina4\redirect("/settings?error=Could not save settings&shop={$request->data->shop}");
     }
+});
+
+\Tina4\Get::add("/settings/lockers", function(\Tina4\Response $response, \Tina4\Request $request){
+    $filter = $request->params["filter"];
+    $pudoShopSettings = new PudoShopSettings();
+    $pudoShopSettings->load("shop = ?", [$request->params["shop"]]);
+
+    $lockers = (new PudoApi($pudoShopSettings->pudoApiKey, $pudoShopSettings->testMode))->getLockers();
+
+    $filteredArray = [];
+    foreach ($lockers as $id => $locker)
+    {
+        if (strpos(strtolower($locker["name"]), strtolower($filter)) !== false) {
+            $filteredArray[] = $locker;
+        }
+    }
+
+    return $response($filteredArray, HTTP_OK);
 });
